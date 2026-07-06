@@ -23,4 +23,4 @@ def walk_time_minutes(lat1, lng1, lat2, lng2) -> float:
 
     straight_line = haversine_miles(lat1, lng1, lat2, lng2)
     actual_miles  = straight_line * WINDINESS
-    return (actual_miles / WALK_SPEED_MPH) * 60
+    return round((actual_miles / WALK_SPEED_MPH) * 60)
