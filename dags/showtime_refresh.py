@@ -28,13 +28,13 @@ def do_fetch_showtimes(**context):
 with DAG(
     dag_id="showtime_refresh",
     default_args=default_args,
-    schedule_interval="@daily",
+    schedule_interval="15 1 * * *",
     start_date=pendulum.datetime(2025, 1, 1, tz=LOCAL_TZ),
     catchup=False,
     tags=["disney", "shows"],
 ) as dag:
 
-    fetch_showtimes = PythonOperator(
+    fetch_showtimes = PythonOperator(                                                               
         task_id="fetch_showtimes",
         python_callable=do_fetch_showtimes,
     )

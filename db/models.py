@@ -58,6 +58,10 @@ class Show(Base):
     id = Column(String, primary_key=True)
     park_id = Column(String, ForeignKey("parks.id"), nullable=False)
     name = Column(String, nullable=False)
+    duration_minutes = Column(Integer, nullable=True)
+    buffer_minutes = Column(Integer, nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
 
     showtimes = relationship("ShowTime", back_populates="show")
 

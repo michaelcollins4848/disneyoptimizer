@@ -44,9 +44,9 @@ export default function ShowtimesTab() {
   if (shows.length === 0) {
     return (
       <div className="center-state">
-        <p>No showtimes found for today.</p>
-        <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
-          Showtimes refresh weekly — try running <code>fetcher/fetch_showtimes.py</code>.
+        <p style={{ fontSize: '1.8rem', marginTop: '0.5rem' }}>
+          Showtimes refresh daily at 12:15 am PST.
+          Please wait and check back soon!
         </p>
       </div>
     )

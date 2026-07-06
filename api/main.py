@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routers import rides, shows
+from api.routers import rides, shows, plans
 
 app = FastAPI(title="DisneyLine API")
 
@@ -13,6 +13,7 @@ app.add_middleware(
 
 app.include_router(rides.router, prefix="/api")
 app.include_router(shows.router, prefix="/api")
+app.include_router(plans.router, prefix="/api")
 
 
 @app.get("/health")
