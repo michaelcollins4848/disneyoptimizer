@@ -1,4 +1,4 @@
-#Pulls raw snapshots from PostgreSQL and returns a clean DataFrame ready for XGBoost training or inference
+#pulls raw snapshots from PostgreSQL and returns a clean DataFrame ready for XGBoost training or inference
 import pandas as pd
 import numpy as np
 from sqlalchemy import text

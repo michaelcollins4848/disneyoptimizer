@@ -1,5 +1,5 @@
 {
-  "_note": "durations in minutes, ride time only (not queue). Pulled from https://touringplans.com/disneyland/attractions/duration",
+  "_note": "durations in minutes, ride time only (not queue); info pulled from https://touringplans.com/disneyland/attractions/duration",
 
   "Space Mountain": 5,
   "Indiana Jones Adventure": 10,

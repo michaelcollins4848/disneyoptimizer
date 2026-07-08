@@ -1,5 +1,5 @@
 {
-  "_note": "Durations in minutes for the show itself. buffer_minutes is how early guests should arrive to get a good spot. Sourced from general Disneyland knowledge — verify against current park guides for precision.",
+  "_note": "durations in minutes for the show itself. buffer_minutes is how early guests should arrive to get a good spot",
 
   "Fantasmic!": { "duration": 30, "buffer": 20 },
   "Wondrous Journeys": { "duration": 15, "buffer": 15 },

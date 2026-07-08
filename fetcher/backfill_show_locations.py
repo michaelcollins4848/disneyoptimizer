@@ -1,10 +1,3 @@
-"""
-One-time backfill: fetches lat/lng coordinates for every show
-in the shows table. Same approach as backfill_ride_locations.py.
-
-Usage:
-    python fetcher/backfill_show_locations.py
-"""
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -7,10 +7,7 @@ router = APIRouter()
 
 @router.get("/shows/today")
 def get_todays_showtimes():
-    """
-    Returns every show with its list of showtimes for today,
-    grouped by show and sorted chronologically.
-    """
+
     session = get_session()
     try:
         result = session.execute(text("""
@@ -26,7 +23,6 @@ def get_todays_showtimes():
 
         rows = result.fetchall()
 
-        # Group rows by show name
         grouped = {}
         for show_id, name, start_time in rows:
             if name not in grouped:

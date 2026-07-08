@@ -7,53 +7,68 @@ import traceback
 router = APIRouter()
 
 
-# ── Request / Response schemas ─────────────────────────────────────────────────
 
 class ShowEventRequest(BaseModel):
-    show_id:  str
-    showtime: str   # "21:00" format
+    show_id:str
+    showtime: Optional[str] = None 
 
 
 class PlanRequest(BaseModel):
-    date:           str              # "YYYY-MM-DD"
-    arrival_time:   str              # "09:00"
+    date:           str  
+    arrival_time:   str    
+    departure_time: Optional[str] = None 
     must_rides:     list[str] = []
     want_rides:     list[str] = []
     optional_rides: list[str] = []
+    avoid_rides:    list[str] = []  
     show_events:    list[ShowEventRequest] = []
     use_cp_sat:     bool = True
+    completed_rides: list[str] = [] 
+    start_lat:       Optional[float] = None
+    start_lng:       Optional[float] = None
+    start_time:      Optional[str] = None 
 
 
-# ── Endpoint ───────────────────────────────────────────────────────────────────
 
 @router.post("/plans")
 def create_plan(req: PlanRequest):
-    """
-    Generates an optimized day plan for Disneyland.
+    #generates an optimized day plan for Disneyland, itakes the user's ride priority lists and any shows they want to attend,
+    #and returns an ordered itinerary with predicted wait times and walk times
 
-    Takes the user's ride priority lists and any shows they want to attend,
-    and returns an ordered itinerary with predicted wait times and walk times.
-    """
     try:
         from optimizer.planner import build_plan
 
-        target_date  = date.fromisoformat(req.date)
-        h, m         = map(int, req.arrival_time.split(":"))
+        target_date = date.fromisoformat(req.date)
+        h, m = map(int, req.arrival_time.split(":"))
         arrival_time = time(h, m)
+
+        departure_time = None
+        if req.departure_time:
+            dh, dm = map(int, req.departure_time.split(":"))
+            departure_time = time(dh, dm)
+
+        start_time = None
+        if req.start_time:
+            sh, sm = map(int, req.start_time.split(":"))
+            start_time = time(sh, sm)
 
         show_events = [
             {"show_id": se.show_id, "showtime": se.showtime}
             for se in req.show_events
         ]
-
         result = build_plan(
-            target_date    = target_date,
-            arrival_time   = arrival_time,
-            must_rides     = req.must_rides,
-            want_rides     = req.want_rides,
-            optional_rides = req.optional_rides,
-            show_events    = show_events,
-            use_cp_sat     = req.use_cp_sat,
+            target_date  = target_date,
+            arrival_time  = arrival_time,
+            departure_time  = departure_time,
+            must_rides  = req.must_rides,
+            want_rides  = req.want_rides,
+            optional_rides  = req.optional_rides,
+            show_events  = show_events,
+            use_cp_sat   = req.use_cp_sat,
+            completed_rides = req.completed_rides,
+            start_lat = req.start_lat,
+            start_lng = req.start_lng,
+            start_time = start_time,
         )
 
         return result
@@ -73,21 +88,22 @@ def create_plan(req: PlanRequest):
 
 @router.get("/plans/rides")
 def get_plannable_rides():
-    """
-    Returns all rides available for planning with their names and IDs.
-    Used to populate the ride picker in the frontend.
-    """
     from db.session import get_session
     from db.models import Ride
 
     session = get_session()
     try:
-        rides = session.query(Ride).order_by(Ride.name).all()
+        rides = (
+            session.query(Ride)
+            .filter(Ride.is_queueable == True)
+            .order_by(Ride.name)
+            .all()
+        )
         return {
             "rides": [
                 {
-                    "id":               r.id,
-                    "name":             r.name,
+                    "id":  r.id,
+                    "name": r.name,
                     "duration_minutes": r.duration_minutes,
                 }
                 for r in rides
@@ -99,10 +115,7 @@ def get_plannable_rides():
 
 @router.get("/plans/shows")
 def get_plannable_shows():
-    """
-    Returns all shows with today's scheduled times.
-    Used to populate the show picker in the frontend.
-    """
+
     from db.session import get_session
     from db.models import Show, ShowTime
     from sqlalchemy import text

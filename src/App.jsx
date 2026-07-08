@@ -4,7 +4,8 @@ import WaitTimesTab from './components/WaitTimesTab'
 import ShowtimesTab from './components/ShowtimesTab'
 import PlanningTab from './components/PlanningTab'
 
-const REFRESH_SECONDS = 600  // 10 minutes
+//refreshes every 10 minutes
+const REFRESH_SECONDS = 600 
 
 function formatCountdown(sec) {
   const m = Math.floor(sec / 60)
@@ -43,14 +44,12 @@ export default function App() {
     }
   }, [])
 
-  // Initial fetch + auto-refresh every 10 min
   useEffect(() => {
     fetchRides()
     const interval = setInterval(fetchRides, REFRESH_SECONDS * 1000)
     return () => clearInterval(interval)
   }, [fetchRides])
 
-  // Countdown ticker
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown(c => (c > 0 ? c - 1 : REFRESH_SECONDS))
@@ -67,7 +66,7 @@ export default function App() {
         <header className="header">
           <div className="logo">
             <span className="logo-star">✦</span>
-            <h1>DisneyLine</h1>
+            <h1>DisneyLined</h1>
             <span className="logo-star">✦</span>
           </div>
           <p className="header-subtitle">Disneyland Park · Live Wait Times</p>
@@ -103,7 +102,7 @@ export default function App() {
             onClick={() => setTab('planning')}
           >
             Plan My Day
-            <span className="soon-badge">Coming Soon</span>
+            <span className="new-badge">New</span>
           </button>
         </nav>
 

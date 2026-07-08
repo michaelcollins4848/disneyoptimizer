@@ -1,13 +1,6 @@
-"""
-DAG: model_retraining
-Runs weekly — retrains the XGBoost model on all accumulated wait
-time data and promotes it to production only if RMSE improves.
 
-Tasks:
-  1. check_data_volume   — skip if not enough rows to train meaningfully
-  2. retrain_model       — full training pipeline + cross-validation
-  3. promote_or_alert    — promote if better, alert if degraded
-"""
+#runs weekly and retrains the XGBoost model on all accumulated wait
+
 import sys
 import os
 

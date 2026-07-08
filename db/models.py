@@ -26,6 +26,7 @@ class Ride(Base):
     latitude         = Column(Float, nullable=True)
     longitude        = Column(Float, nullable=True) 
     park = relationship("Park", back_populates="rides")
+    is_queueable = Column(Boolean, default=True)
 
     snapshots = relationship("WaitTimeSnapshot", back_populates="ride")
 

@@ -7,11 +7,7 @@ router = APIRouter()
 
 @router.get("/rides/live")
 def get_live_wait_times():
-    """
-    Returns the most recent wait time snapshot for every ride.
-    Uses DISTINCT ON (PostgreSQL) to get latest reading per ride,
-    which is more reliable than matching on MAX(recorded_at) globally.
-    """
+
     session = get_session()
     try:
         result = session.execute(text("""
@@ -33,6 +29,7 @@ def get_live_wait_times():
                 l.recorded_at
             FROM rides r
             LEFT JOIN latest l ON l.ride_id = r.id
+            WHERE r.is_queueable = TRUE
             ORDER BY l.wait_minutes ASC NULLS LAST, r.name ASC
         """))
 
@@ -50,7 +47,6 @@ def get_live_wait_times():
             for row in rows
         ]
 
-        # Most recent timestamp across all rides (for the "last updated" display)
         last_updated = max(
             (r["recorded_at"] for r in rides if r["recorded_at"]),
             default=None,
