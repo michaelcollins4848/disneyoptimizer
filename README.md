@@ -6,7 +6,7 @@ A full-stack Disneyland wait time optimizer. It collects live ride data every 10
 
 Deployed on AWS, collecting data 24/7.
 
-![DisneyLined](./disneylinedimg)
+![DisneyLined](./disneylinedimg.png)
 
 ---
 
